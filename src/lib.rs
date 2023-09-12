@@ -30,28 +30,34 @@ impl TennisGame for TennisGame1 {
 
     fn get_score(&self) -> String {
         match (self.player_1_score, self.player_2_score) {
-            // A game is won by the first player to have won at least four points in total and
-            // at least two points more than the opponent.
-            (x, y) if x >= (y + 2) && x >= 4 => "Win for player1".to_string(),
-            (x, y) if y >= (x + 2) && y >= 4 => "Win for player2".to_string(),
+            (s1, s2) if has_won(s1, s2) => "Win for player1".to_string(),
+            (s1, s2) if has_won(s2, s1) => "Win for player2".to_string(),
 
-            // If at least three points have been scored by each side and a player has one more
-            // point than his opponent, the score of the game is “advantage” for the player
-            // in the lead.
-            (x, y) if x > y && x >= 4 => "Advantage player1".to_string(),
-            (x, y) if x < y && y >= 4 => "Advantage player2".to_string(),
+            (s1, s2) if has_advantage(s1, s2) => "Advantage player1".to_string(),
+            (s1, s2) if has_advantage(s2, s1) => "Advantage player2".to_string(),
 
-            // If at least three points have been scored by each player, and the scores are
-            // equal, the score is “deuce”.
-            (x, y) if x == y && x >= 3 => "Deuce".to_string(),
+            (s1, s2) if is_equal_above_3(s1, s2) => "Deuce".to_string(),
 
-            // The running score of each game is described in a manner peculiar to tennis:
-            // scores from zero to three points are described as “love”, “15”, “30”, and
-            // “40” respectively.
-            (x, y) if x == y => score_name(x) + "-All",
-            (x, y) => score_name(x) + "-" + &score_name(y),
+            (s1, s2) if is_equal(s1, s2) => score_name(s1) + "-All",
+            (s1, s2) => score_name(s1) + "-" + &score_name(s2),
         }
     }
+}
+
+fn is_equal_above_3(s1: u8, s2: u8) -> bool {
+    s1 == s2 && s1 >= 3
+}
+
+fn is_equal(s1: u8, s2: u8) -> bool {
+    s1 == s2
+}
+
+fn has_advantage(player: u8, opponent: u8) -> bool {
+    player > opponent && player >= 4
+}
+
+fn has_won(player: u8, opponent: u8) -> bool {
+    player >= (opponent + 2) && player >= 4
 }
 
 #[cfg(test)]
