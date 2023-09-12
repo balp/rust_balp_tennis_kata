@@ -9,16 +9,6 @@ struct TennisGame1 {
     player_2_score: u8,
 }
 
-fn score_name(score: u8) -> String {
-    match score {
-        3 => "Forty".to_string(),
-        2 => "Thirty".to_string(),
-        1 => "Fifteen".to_string(),
-        0 => "Love".to_string(),
-        _ => "".to_string(),
-    }
-}
-
 impl TennisGame for TennisGame1 {
     fn won_point(&mut self, player_name: &str) {
         if player_name == "player1" {
@@ -41,6 +31,16 @@ impl TennisGame for TennisGame1 {
             (s1, s2) if is_equal(s1, s2) => score_name(s1) + "-All",
             (s1, s2) => score_name(s1) + "-" + &score_name(s2),
         }
+    }
+}
+
+fn score_name(score: u8) -> String {
+    match score {
+        3 => "Forty".to_string(),
+        2 => "Thirty".to_string(),
+        1 => "Fifteen".to_string(),
+        0 => "Love".to_string(),
+        _ => "".to_string(),
     }
 }
 
